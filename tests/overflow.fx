@@ -4,10 +4,18 @@ using standard::io::console;
 
 def main() -> int
 {
-    for (int i; i < 1000000; i++)
+    try
     {
-        int c = i;
-        println(c);
+        throw("Test throw...");
+        for (int i; i < 1000000; i++)
+        {
+            int c = i;
+            println(c);
+        };
+    }
+    catch (byte* e)
+    {
+        println(e);
     };
     return 0;
 };

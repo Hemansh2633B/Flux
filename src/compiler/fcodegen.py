@@ -4813,7 +4813,7 @@ class CodegenVisitor:
                 if exc_type:
                     exc_type_llvm = TypeSystem.get_llvm_type(exc_type, module)
                 else:
-                    exc_type_llvm = ir.IntType(32)
+                    exc_type_llvm = ir.IntType(64)  # auto -> i64 (preserves pointer-width value)
 
                 exc_var = builder.alloca(exc_type_llvm, name=exc_name)
 
@@ -4824,6 +4824,8 @@ class CodegenVisitor:
                         exc_val = builder.zext(exc_val_i64, exc_type_llvm, name='exc_ext')
                     else:
                         exc_val = exc_val_i64
+                elif isinstance(exc_type_llvm, ir.PointerType):
+                    exc_val = builder.inttoptr(exc_val_i64, exc_type_llvm, name='exc_int_to_ptr')
                 else:
                     exc_val = builder.bitcast(exc_val_i64, exc_type_llvm)
 
@@ -4863,6 +4865,8 @@ class CodegenVisitor:
                 exc_val_i64 = builder.trunc(exc_val, ir.IntType(64), name='exc_trunc')
             else:
                 exc_val_i64 = exc_val
+        elif isinstance(exc_val.type, ir.PointerType):
+            exc_val_i64 = builder.ptrtoint(exc_val, ir.IntType(64), name='exc_ptr_to_int')
         else:
             exc_val_i64 = builder.bitcast(exc_val, ir.IntType(64))
 
