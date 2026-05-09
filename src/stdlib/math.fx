@@ -1,4 +1,3 @@
-// Author Hemansh2633B
 #ifndef FLUX_STANDARD
 #def FLUX_STANDARD 1;
 #endif;
@@ -19,24 +18,24 @@ namespace standard
         const i16 PI16 = 3;
         const i32 PI32 = 3;
         const i64 PI64 = 3;
-        const float PIF = 3.14159265358979323846f;
-        const double PID = 3.14159265358979323846;
+        const float PIF = 3.14159f;
+        const double PID = 3.14159;
         
         const i8 E8 = 2;
         const i16 E16 = 2;
         const i32 E32 = 2;
         const i64 E64 = 2;
-        const float EF = 2.71828182845904523536f;
-        const double ED = 2.71828182845904523536;
+        const float EF = 2.71828f;
+        const double ED = 2.71828;
 
-        const float PI_F = 3.14159265358979323846f;
-        const double PI_D = 3.14159265358979323846;
-        const float E_F = 2.71828182845904523536f;
-        const double E_D = 2.71828182845904523536;
-        const float TAU_F = 6.28318530717958647692f;
-        const double TAU_D = 6.28318530717958647692;
-        const float PHI_F = 1.61803398874989484820f;
-        const double PHI_D = 1.61803398874989484820;
+        const float PI_F = 3.14159f;
+        const double PI_D = 3.14159;
+        const float E_F = 2.71828f;
+        const double E_D = 2.71828;
+        const float TAU_F = 6.28318f;
+        const double TAU_D = 6.28318;
+        const float PHI_F = 1.61803f;
+        const double PHI_D = 1.61803;
 
         struct Vec3  { float x, y, z;    };
         struct Vec4  { float w, x, y, z; };
@@ -279,7 +278,7 @@ namespace standard
             {
                 prev_y = y;
                 y = (y + x / y) * 0.5;
-                if (abs(y - prev_y) < 1e-15) {break;};
+                if (abs(y - prev_y) < 0.000000000000001) {break;};
             };
             return y;
         };
@@ -307,75 +306,19 @@ namespace standard
             {
                 prev_y = y;
                 y = (2.0 * y + x / (y * y)) / 3.0;
-                if (abs(y - prev_y) < 1e-15) {break;};
+                if (abs(y - prev_y) < 0.000000000000001) {break;};
             };
             return y;
         };
 
         def pow(float base, float exp) -> float
         {
-            if (base == 0.0f)
-            {
-                if (exp > 0.0f) {return 0.0f;};
-                if (exp == 0.0f) {return 1.0f;};
-                return 0.0f;
-            };
-            if (exp == 0.0f) {return 1.0f;};
-            if (exp == 1.0f) {return base;};
-            if (exp == 2.0f) {return base * base;};
-            if (exp == 0.5f) {return sqrt(base);};
-            bool neg_exp = exp < 0.0f;
-            float abs_exp = neg_exp ? -exp : exp;
-            i32 int_part = (i32)abs_exp;
-            float frac_part = abs_exp - (float)int_part;
-            float result = 1.0f;
-            float cur = base;
-            i32 e = int_part;
-            while (e > 0)
-            {
-                if (e & 1) {result *= cur;};
-                cur *= cur;
-                e >>= 1;
-            };
-            if (frac_part > 0.0f)
-            {
-                result *= exp(frac_part * log(base));
-            };
-            if (neg_exp) {result = 1.0f / result;};
-            return result;
+            return base ^ exp;
         };
 
         def pow(double base, double exp) -> double
         {
-            if (base == 0.0)
-            {
-                if (exp > 0.0) {return 0.0;};
-                if (exp == 0.0) {return 1.0;};
-                return 0.0;
-            };
-            if (exp == 0.0) {return 1.0;};
-            if (exp == 1.0) {return base;};
-            if (exp == 2.0) {return base * base;};
-            if (exp == 0.5) {return sqrt(base);};
-            bool neg_exp = exp < 0.0;
-            double abs_exp = neg_exp ? -exp : exp;
-            i64 int_part = (i64)abs_exp;
-            double frac_part = abs_exp - (double)int_part;
-            double result = 1.0;
-            double cur = base;
-            i64 e = int_part;
-            while (e > 0)
-            {
-                if (e & 1) {result *= cur;};
-                cur *= cur;
-                e >>= 1;
-            };
-            if (frac_part > 0.0)
-            {
-                result *= exp(frac_part * log(base));
-            };
-            if (neg_exp) {result = 1.0 / result;};
-            return result;
+            return base ^ exp;
         };
 
         def hypot(float x, float y) -> float
@@ -633,7 +576,7 @@ namespace standard
         def tan(double x) -> double
         {
             double c = cos(x);
-            if (abs(c) < 1e-12) {return 0.0;};
+            if (abs(c) < 0.000000000001) {return 0.0;};
             return sin(x) / c;
         };
 
@@ -669,12 +612,12 @@ namespace standard
             if (recip) { x = 1.0f / x; };
             float x2 = x * x;
             float r = x * (1.0f
-                - x2 * (0.333333333f
+                - x2 * (0.33333f
                 - x2 * (0.2f
-                - x2 * (0.142857143f
-                - x2 * (0.111111111f
-                - x2 * (0.089764464f
-                - x2 * (0.060035485f)))))));
+                - x2 * (0.14286f
+                - x2 * (0.11111f
+                - x2 * (0.08976f
+                - x2 * (0.06004f)))))));
             if (recip) { r = PI_F * 0.5f - r; };
             if (neg) { r = -r; };
             return r;
@@ -688,12 +631,12 @@ namespace standard
             if (recip) { x = 1.0 / x; };
             double x2 = x * x;
             double r = x * (1.0
-                - x2 * (0.3333333333333333
+                - x2 * (0.33333
                 - x2 * (0.2
-                - x2 * (0.14285714285714285
-                - x2 * (0.1111111111111111
-                - x2 * (0.08976446425679978
-                - x2 * (0.06003548500086211)))))));
+                - x2 * (0.14286
+                - x2 * (0.11111
+                - x2 * (0.08976
+                - x2 * (0.06004)))))));
             if (recip) { r = PI_D * 0.5 - r; };
             if (neg) { r = -r; };
             return r;
@@ -817,7 +760,7 @@ namespace standard
 
         def exp(float x) -> float
         {
-            if (x > 88.0f) {return 3.402823e38f;};
+            if (x > 88.0f) {return 3.40282e38f;};
             if (x < -87.0f) {return 0.0f;};
             float result = 1.0f;
             float term = 1.0f;
@@ -832,7 +775,7 @@ namespace standard
 
         def exp(double x) -> double
         {
-            if (x > 709.0) {return 1.797693e308;};
+            if (x > 709.0) {return 1.79769e308;};
             if (x < -708.0) {return 0.0;};
             double result = 1.0;
             double term = 1.0;
@@ -840,7 +783,7 @@ namespace standard
             {
                 term *= x / (double)i;
                 result += term;
-                if (abs(term) < 1e-15) {break;};
+                if (abs(term) < 0.000000000000001) {break;};
             };
             return result;
         };
@@ -851,7 +794,6 @@ namespace standard
             {
                 float result = x;
                 float term = x;
-                float x2 = x * x;
                 for (i32 i = 2; i <= 8; i++)
                 {
                     term *= x / (float)i;
@@ -903,7 +845,7 @@ namespace standard
                 term *= t2;
                 result += term / (float)(2 * i + 1);
             };
-            return 2.0f * result + (float)e * 0.6931471805599453f;
+            return 2.0f * result + (float)e * 0.69315f;
         };
 
         def log(double x) -> double
@@ -931,9 +873,9 @@ namespace standard
                 term *= t2;
                 double add = term / (double)(2 * i + 1);
                 result += add;
-                if (abs(add) < 1e-16) {break;};
+                if (abs(add) < 0.0000000000000001) {break;};
             };
-            return 2.0 * result + (double)e * 0.6931471805599453;
+            return 2.0 * result + (double)e * 0.69315;
         };
 
         def log1p(float x) -> float
@@ -974,47 +916,47 @@ namespace standard
 
         def log2(float x) -> float
         {
-            return log(x) * 1.4426950408889634f;
+            return log(x) * 1.44270f;
         };
 
         def log2(double x) -> double
         {
-            return log(x) * 1.4426950408889634;
+            return log(x) * 1.44270;
         };
 
         def log10(float x) -> float
         {
-            return log(x) * 0.4342944819032518f;
+            return log(x) * 0.43429f;
         };
 
         def log10(double x) -> double
         {
-            return log(x) * 0.4342944819032518;
+            return log(x) * 0.43429;
         };
 
         def erf(float x) -> float
         {
-            float sign = x < 0.0f ? -1.0f : 1.0f;
-            float a = abs(x);
-            float t = 1.0f / (1.0f + 0.3275911f * a);
-            float t2 = t * t;
-            float t3 = t2 * t;
-            float t4 = t2 * t2;
-            float t5 = t4 * t;
-            float result = 1.0f - (0.254829592f * t - 0.284496736f * t2 + 1.421413741f * t3 - 1.453152027f * t4 + 1.061405429f * t5) * exp(-a * a);
+            float sign = x < 0.0f ? -1.0f : 1.0f,
+                  a = abs(x),
+                  t = 1.0f / (1.0f + 0.32759f * a),
+                  t2 = t * t,
+                  t3 = t2 * t,
+                  t4 = t2 * t2,
+                  t5 = t4 * t,
+                  result = 1.0f - (0.25483f * t - 0.28450f * t2 + 1.42141f * t3 - 1.45315f * t4 + 1.06141f * t5) * exp(-a * a);
             return sign * result;
         };
 
         def erf(double x) -> double
         {
-            double sign = x < 0.0 ? -1.0 : 1.0;
-            double a = abs(x);
-            double t = 1.0 / (1.0 + 0.3275911 * a);
-            double t2 = t * t;
-            double t3 = t2 * t;
-            double t4 = t2 * t2;
-            double t5 = t4 * t;
-            double result = 1.0 - (0.254829592 * t - 0.284496736 * t2 + 1.421413741 * t3 - 1.453152027 * t4 + 1.061405429 * t5) * exp(-a * a);
+            double sign = x < 0.0 ? -1.0 : 1.0,
+                   a = abs(x),
+                   t = 1.0 / (1.0 + 0.32759 * a),
+                   t2 = t * t,
+                   t3 = t2 * t,
+                   t4 = t2 * t2,
+                   t5 = t4 * t,
+                   result = 1.0 - (0.25483 * t - 0.28450 * t2 + 1.42141 * t3 - 1.45315 * t4 + 1.06141 * t5) * exp(-a * a);
             return sign * result;
         };
 
@@ -1035,9 +977,9 @@ namespace standard
                 if (x == floor(x)) {return 0.0f;};
                 return PI_F / (sin(PI_F * x) * tgamma(1.0f - x));
             };
-            float p[8] = {676.5203681218851f, -1259.1392167224028f, 771.32342877765313f, -176.61502916214059f, 12.507343278686905f, -0.13857109526572012f, 9.9843695780195716e-6f, 1.5056327351493116e-7f};
+            float p[8] = {676.52037f, -1259.13916f, 771.32343f, -176.61503f, 12.50734f, -0.13857f, 0.00001f, 0.00000f};
             float z = x - 1.0f;
-            float y = 0.99999999999980993f;
+            float y = 1.00000f;
             for (i32 i = 0; i < 8; i++) { y += p[i] / (z + (float)i + 1.0f); };
             float t = z + 7.5f;
             return sqrt(2.0f * PI_F) * pow(t, z + 0.5f) * exp(-t) * y;
@@ -1050,9 +992,9 @@ namespace standard
                 if (x == floor(x)) {return 0.0;};
                 return PI_D / (sin(PI_D * x) * tgamma(1.0 - x));
             };
-            double p[8] = {676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7};
+            double p[8] = {676.52037, -1259.13916, 771.32343, -176.61503, 12.50734, -0.13857, 0.00001, 0.00000};
             double z = x - 1.0;
-            double y = 0.99999999999980993;
+            double y = 1.00000;
             for (i32 i = 0; i < 8; i++) { y += p[i] / (z + (double)i + 1.0); };
             double t = z + 7.5;
             return sqrt(2.0 * PI_D) * pow(t, z + 0.5) * exp(-t) * y;
@@ -1265,9 +1207,9 @@ namespace standard
             if (x == y) {return x;};
             if (isnan(x) || isnan(y)) {return x;};
             if (!isfinite(x)) {return x;};
-            i32 ix = *(i32*)&x;
+            i32 ix = *(i32*)@x;
             if ((x < y) == (x > 0.0f)) {ix++;} else {ix--;};
-            return *(float*)&ix;
+            return *(float*)@ix;
         };
 
         def nextafter(double x, double y) -> double
@@ -1275,24 +1217,24 @@ namespace standard
             if (x == y) {return x;};
             if (isnan(x) || isnan(y)) {return x;};
             if (!isfinite(x)) {return x;};
-            i64 ix = *(i64*)&x;
+            i64 ix = *(i64*)@x;
             if ((x < y) == (x > 0.0)) {ix++;} else {ix--;};
-            return *(double*)&ix;
+            return *(double*)@ix;
         };
 
         def ulp(float x) -> float
         {
-            return nextafter(x, 1e38f) - x;
+            return nextafter(x, 3.40282e38f) - x;
         };
 
         def ulp(double x) -> double
         {
-            return nextafter(x, 1e308) - x;
+            return nextafter(x, 1.79769e308) - x;
         };
 
         def popcount(byte x) -> byte
         {
-            x = x - ((x >> 1) & 0x55);
+            x -= (x >> 1) & 0x55;
             x = (x & 0x33) + ((x >> 2) & 0x33);
             x = (x + (x >> 4)) & 0x0F;
             return x;
@@ -1300,16 +1242,16 @@ namespace standard
 
         def popcount(i8 x) -> i8
         {
-            u8 u = (u8)x;
-            u = u - ((u >> 1) & 0x55);
+            i8 u = x;
+            u -= (u >> 1) & 0x55;
             u = (u & 0x33) + ((u >> 2) & 0x33);
             u = (u + (u >> 4)) & 0x0F;
-            return (i8)u;
+            return u;
         };
 
         def popcount(u16 x) -> u16
         {
-            x = x - ((x >> 1) & 0x5555);
+            x -= (x >> 1) & 0x5555;
             x = (x & 0x3333) + ((x >> 2) & 0x3333);
             x = (x + (x >> 4)) & 0x0F0F;
             x = (x + (x >> 8)) & 0x00FF;
@@ -1318,56 +1260,56 @@ namespace standard
 
         def popcount(i16 x) -> i16
         {
-            u16 u = (u16)x;
-            u = u - ((u >> 1) & 0x5555);
+            i16 u = x;
+            u -= (u >> 1) & 0x5555;
             u = (u & 0x3333) + ((u >> 2) & 0x3333);
             u = (u + (u >> 4)) & 0x0F0F;
             u = (u + (u >> 8)) & 0x00FF;
-            return (i16)u;
+            return u;
         };
 
         def popcount(u32 x) -> u32
         {
-            x = x - ((x >> 1) & 0x55555555);
+            x -= (x >> 1) & 0x55555555;
             x = (x & 0x33333333) + ((x >> 2) & 0x33333333);
             x = (x + (x >> 4)) & 0x0F0F0F0F;
-            x = x + (x >> 8);
-            x = x + (x >> 16);
+            x += x >> 8;
+            x += x >> 16;
             return x & 0x3F;
         };
 
         def popcount(i32 x) -> i32
         {
-            u32 u = (u32)x;
-            u = u - ((u >> 1) & 0x55555555);
+            i32 u = x;
+            u -= (u >> 1) & 0x55555555;
             u = (u & 0x33333333) + ((u >> 2) & 0x33333333);
             u = (u + (u >> 4)) & 0x0F0F0F0F;
-            u = u + (u >> 8);
-            u = u + (u >> 16);
-            return (i32)(u & 0x3F);
+            u += u >> 8;
+            u += u >> 16;
+            return u & 0x3F;
         };
 
         def popcount(u64 x) -> u64
         {
-            x = x - ((x >> 1) & 0x5555555555555555);
+            x -= (x >> 1) & 0x5555555555555555;
             x = (x & 0x3333333333333333) + ((x >> 2) & 0x3333333333333333);
             x = (x + (x >> 4)) & 0x0F0F0F0F0F0F0F0F;
-            x = x + (x >> 8);
-            x = x + (x >> 16);
-            x = x + (x >> 32);
+            x += x >> 8;
+            x += x >> 16;
+            x += x >> 32;
             return x & 0x7F;
         };
 
         def popcount(i64 x) -> i64
         {
-            u64 u = (u64)x;
-            u = u - ((u >> 1) & 0x5555555555555555);
+            i64 u = x;
+            u -= (u >> 1) & 0x5555555555555555;
             u = (u & 0x3333333333333333) + ((u >> 2) & 0x3333333333333333);
             u = (u + (u >> 4)) & 0x0F0F0F0F0F0F0F0F;
-            u = u + (u >> 8);
-            u = u + (u >> 16);
-            u = u + (u >> 32);
-            return (i64)(u & 0x7F);
+            u += u >> 8;
+            u += u >> 16;
+            u += u >> 32;
+            return u & 0x7F;
         };
 
         def reverse_bits(byte x) -> byte
@@ -1380,11 +1322,11 @@ namespace standard
 
         def reverse_bits(i8 x) -> i8
         {
-            u8 u = (u8)x;
+            i8 u = x;
             u = ((u & 0xF0) >> 4) | ((u & 0x0F) << 4);
             u = ((u & 0xCC) >> 2) | ((u & 0x33) << 2);
             u = ((u & 0xAA) >> 1) | ((u & 0x55) << 1);
-            return (i8)u;
+            return u;
         };
 
         def reverse_bits(u16 x) -> u16
@@ -1398,12 +1340,12 @@ namespace standard
 
         def reverse_bits(i16 x) -> i16
         {
-            u16 u = (u16)x;
+            i16 u = x;
             u = ((u & 0xFF00) >> 8) | ((u & 0x00FF) << 8);
             u = ((u & 0xF0F0) >> 4) | ((u & 0x0F0F) << 4);
             u = ((u & 0xCCCC) >> 2) | ((u & 0x3333) << 2);
             u = ((u & 0xAAAA) >> 1) | ((u & 0x5555) << 1);
-            return (i16)u;
+            return u;
         };
 
         def reverse_bits(u32 x) -> u32
@@ -1418,13 +1360,13 @@ namespace standard
 
         def reverse_bits(i32 x) -> i32
         {
-            u32 u = (u32)x;
+            i32 u = x;
             u = ((u & 0xFFFF0000) >> 16) | ((u & 0x0000FFFF) << 16);
             u = ((u & 0xFF00FF00) >> 8) | ((u & 0x00FF00FF) << 8);
             u = ((u & 0xF0F0F0F0) >> 4) | ((u & 0x0F0F0F0F) << 4);
             u = ((u & 0xCCCCCCCC) >> 2) | ((u & 0x33333333) << 2);
             u = ((u & 0xAAAAAAAA) >> 1) | ((u & 0x55555555) << 1);
-            return (i32)u;
+            return u;
         };
 
         def reverse_bits(u64 x) -> u64
@@ -1440,14 +1382,14 @@ namespace standard
 
         def reverse_bits(i64 x) -> i64
         {
-            u64 u = (u64)x;
+            i64 u = x;
             u = ((u & 0xFFFFFFFF00000000) >> 32) | ((u & 0x00000000FFFFFFFF) << 32);
             u = ((u & 0xFFFF0000FFFF0000) >> 16) | ((u & 0x0000FFFF0000FFFF) << 16);
             u = ((u & 0xFF00FF00FF00FF00) >> 8) | ((u & 0x00FF00FF00FF00FF) << 8);
             u = ((u & 0xF0F0F0F0F0F0F0F0) >> 4) | ((u & 0x0F0F0F0F0F0F0F0F) << 4);
             u = ((u & 0xCCCCCCCCCCCCCCCC) >> 2) | ((u & 0x3333333333333333) << 2);
             u = ((u & 0xAAAAAAAAAAAAAAAA) >> 1) | ((u & 0x5555555555555555) << 1);
-            return (i64)u;
+            return u;
         };
 
         def rotate_x(Vec3* v, float s, float c) -> Vec3
