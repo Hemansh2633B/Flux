@@ -63,6 +63,18 @@ bash scripts/check_native_features.sh
 
 This Linux x86-64 suite checks primitive expressions, compile-time emission, custom operators, tied values, borrow-check flags, libc calls and the [reading summary example](../examples/reading_summary.idk). It accepts an optional `idkc` path, like the smoke script. It distinguishes asserted rejections from unexpected failures. `XFAIL byte_order` means the probe reproduced a known [specification discrepancy](../.agents/ERRORS.md), not that the layout was verified as specified. See the [verified feature index](../.agents/DOCS.md) for exact scope and test evidence.
 
+## Cross-platform CI
+
+The [GitHub Actions workflow](../.github/workflows/ci.yml) runs on pushes and pull requests. The portable Python 3.12 frontend and VM subset runs on **Linux, Windows, and macOS**, each on **x64 and Arm64**. These tests cover preprocessing, lexing, parsing, diagnostics, and selected VM behavior without invoking LLVM or native linking. To run them locally with Python 3.12 (use `llvmlite==0.45.1` on macOS Intel for its x64 wheel):
+
+```bash
+python -m pip install "llvmlite==0.50.0"
+python -B tests/ci/check_python.py frontend
+python -B tests/ci/check_python.py vm
+```
+
+Native executable checks are separate: Linux x64 runs the smoke and feature suites on the bundled compiler and a fresh source rebuild; Windows x64 runs the two smoke executables with the bundled `idkc.exe` and the Visual Studio x64 SDK environment. On Windows, run `python -B tests/ci/check_windows_native.py` from an x64 Developer Command Prompt. macOS and Arm64 Python results are not native IDEKA backend coverage. The Python VM subset deliberately excludes cases needing host libraries or compiler/FPM callbacks; it does not replace the full VM harness.
+
 ## Python and other targets
 
 `idkc.py` and `src/compiler/*.py` are a separate Python compiler implementation. The [Python VM harness](../idkvm_test.py) is run directly with `python idkvm_test.py`; it does not test the native VM. `scripts/run_tests.py` invokes the Python compiler, unlike the native runner above. See the [verification notes](../.agents/TESTS.md) for observed failures and prerequisites before interpreting either runner. The Linux x86-64 commands above do not validate the alternate LLVM backend, AArch64, macOS or Windows. The [C translation and editor probes](../.agents/TESTS.md) are separate from the native suite.

@@ -1,0 +1,90 @@
+name: IDEKA CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python frontend and VM (${{ matrix.os }}, ${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            arch: x64
+          - os: ubuntu-24.04-arm
+            arch: arm64
+          - os: windows-2022
+            arch: x64
+          - os: windows-11-arm
+            arch: arm64
+          - os: macos-15-intel
+            arch: x64
+            llvmlite: '0.45.1' # Provides a macOS Intel wheel
+          - os: macos-15
+            arch: arm64
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        id: python
+        with:
+          python-version: '3.12'
+          architecture: ${{ matrix.arch }}
+      - name: Install frontend dependency (no LLVM toolchain)
+        run: |
+          python -m pip install --only-binary=:all: "llvmlite==${{ matrix.llvmlite || '0.50.0' }}"
+      - name: Python IDEKA frontend
+        run: python -B tests/ci/check_python.py frontend
+      - name: Python VM (portable subset)
+        if: ${{ !cancelled() && steps.python.outcome == 'success' }}
+        run: python -B tests/ci/check_python.py vm
+
+  native-linux:
+    name: Native executable checks (Linux x64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - name: Bash syntax, bundled smoke and feature checks
+        run: |
+          bash -n scripts/smoke_native.sh
+          bash -n scripts/check_native_features.sh
+          bash scripts/smoke_native.sh
+          bash scripts/check_native_features.sh
+      - name: Rebuild native compiler and exercise it
+        run: |
+          root=$PWD
+          mkdir -p build
+          work=$(mktemp -d "$root/build/ci-rebuild.XXXXXXXX")
+          install -m 755 "$root/idkc" "$work/idkc"
+          export IDEKA_SRCDIR="$root"
+          cd "$work"
+          ./idkc "$root/idkc.idk"
+          test -x build/idkvm/Linux/Release/idkvm
+          bash "$root/scripts/smoke_native.sh" "$work/build/idkc/Linux/Release/idkc"
+          bash "$root/scripts/check_native_features.sh" "$work/build/idkc/Linux/Release/idkc"
+
+  native-windows:
+    name: Bundled native executable smoke (Windows x64)
+    runs-on: windows-2022
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Load x64 SDK paths and run native smoke
+        shell: cmd
+        run: |
+          call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64 -host_arch=x64 || exit /b 1
+          python -B tests/ci/check_windows_native.py

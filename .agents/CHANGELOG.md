@@ -32,3 +32,7 @@ Append one entry per task, after the other agent files are updated. Format: date
 ## 2026-11-19 — TASK-018
 
 2026-11-19 | TASK-018 | Arena coding agent | Prepared the branch for pull request handoff. | TEST-015 revalidated all four documented commands, both native compilers, both smoke programs, the 1/1 focused runner, and 13 feature checks per compiler. Byte order remained a documented XFAIL. No compiler or LSP fixes in this patch.
+
+## 2026-11-19 — TASK-019
+
+2026-11-19 | TASK-019 | Arena coding agent | Added Actions jobs for portable Linux, Windows, and macOS checks on x64 and Arm64, with separate native Linux and Windows x64 jobs. | TEST-016 confirmed local Linux frontend, VM, native smoke/feature checks and workflow validation. Byte order remains XFAIL; no non-Linux results inferred from the sandbox.

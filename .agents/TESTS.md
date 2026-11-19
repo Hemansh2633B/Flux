@@ -158,3 +158,10 @@ Unless otherwise noted: 2026-11-19; bundled and rebuilt native `Crimson Cobra v2
 - **Code:** `bash -n` on both native shell scripts; execute all four Bash blocks in the [developer workflow](../docs/developer_workflow.md); then `bash scripts/check_native_features.sh "$work/build/idkc/Linux/Release/idkc"` using the fresh rebuild workspace.
 - **Expected / actual:** Both shell checks passed; native Linux x86-64 compiler and VM rebuilt; both smoke programs passed on bundled and rebuilt compilers; the focused runner passed 1/1; both feature runs produced 13 passes and the known byte-order XFAIL.
 - **Status:** PASS for the scoped verification. The byte-order divergence remains open; no new LSP, Python, or alternate-target run.
+
+### TEST-016: Cross-platform CI local verification
+
+- **Date / task / category:** 2026-11-19 · TASK-019 · misc.
+- **Code:** [Actions workflow](../.github/workflows/ci.yml), [Python checks](../tests/ci/check_python.py), [Windows native smoke](../tests/ci/check_windows_native.py), existing native scripts and `idkc.idk`.
+- **Expected / actual (Linux x64 sandbox):** `python -B tests/ci/check_python.py frontend` with Python 3.12.12 and llvmlite 0.50.0 passed 3/3. `python3 -B tests/ci/check_python.py vm` with Python 3.11.2 passed 10/10. The Linux native steps rebuilt the compiler and VM; both smoke programs and 13 feature assertions passed on bundled and rebuilt compilers, with the known byte-order XFAIL. `action-validator` 0.6.0 accepted the workflow; shell and Python syntax checks also passed.
+- **Status:** PASS for local coverage only. Hosted Python 3.12 VM and non-Linux-x64 jobs are separate coverage. The bundled Linux compiler rejected `--arch arm64 --asm-only` because it was built without the a64 backend; Arm64 is not treated as native executable coverage in this workflow.
