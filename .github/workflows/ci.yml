@@ -28,7 +28,7 @@ jobs:
           - os: macos-15-intel
             arch: x64
             llvmlite: '0.45.1' # Provides a macOS Intel wheel
-          - os: macos-15
+          - os: macos-26
             arch: arm64
     env:
       PYTHONUTF8: '1'

@@ -36,4 +36,4 @@ Batch started: 2026-11-19T15:48:38Z. Batch closeout: 2026-11-19T15:54:12Z.
 - **TASK-016** — Reviewed all agent records, evidence links, scope limits and task statuses. TEST-004 and changelog.
 - **TASK-017** — Reproduced LSP startup on clean fork `main` and prepared a [report](reports/lsp-startup.md); TASK-011 remains blocked. Started: 2026-11-19T15:57:20Z. Completed: 2026-11-19T15:57:48Z.
 - **TASK-018** — Revalidated the branch and prepared the pull request handoff. Started: 2026-11-19T16:05:55Z. Completed: 2026-11-19T16:06:27Z. See TEST-015.
-- **TASK-019** — Added cross-platform CI and validated the available Linux checks; hosted platform results require the Actions run. Started: 2026-11-19T16:23:17Z. Local verification: 2026-11-19T16:26:16Z. See TEST-016.
+- **TASK-019** — Added cross-platform CI and verified local and hosted coverage; see TEST-016 for tested platforms and pending runner results. Started: 2026-11-19T16:23:17Z. Local verification: 2026-11-19T16:26:16Z. See TEST-016.

@@ -36,3 +36,5 @@ Append one entry per task, after the other agent files are updated. Format: date
 ## 2026-11-19 — TASK-019
 
 2026-11-19 | TASK-019 | Arena coding agent | Added Actions jobs for portable Linux, Windows, and macOS checks on x64 and Arm64, with separate native Linux and Windows x64 jobs. | TEST-016 confirmed local Linux frontend, VM, native smoke/feature checks and workflow validation. Byte order remains XFAIL; no non-Linux results inferred from the sandbox.
+
+- Hosted follow-up: run 44566101247 passed seven jobs; switched the still-queued macOS 15 Arm64 job to the current macOS 26 Arm64 image for the next run.
